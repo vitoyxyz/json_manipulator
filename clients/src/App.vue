@@ -1,31 +1,31 @@
 <template>
 <div>
     <div class="form">
-    <form  ref="form" @submit.prevent="submitForm" class="registration">
+    <form  ref="form" @submit.prevent="submitForm" class="inputs">
       <label for="tag">
         <p>Tag <span class="required"> *</span></p>
 
-        <input type="text" v-model="form.tag" />
+        <input  ref="tag" :class="{ 'is-invalid': submitted && $v.form.tag.$error }" type="text" v-model="form.tag" />
       </label>
  
         <label for="pattern">
-          <p>Pattern <span class="required"> *</span> <button class="add"> Add </button></p>
-          <input type="text" v-model="form.pattern" />
+          <p>Pattern <span class="required"> *</span> <button @click="addPattern()" class="add"> Add </button></p>
+          <input  ref="pattern" :class="{ 'is-invalid': submitted && $v.form.pattern.$error }" type="text" v-model="form.pattern" />
         </label>
     
-
-      <label for="responces">
-        <p>Responces <span class="required"> *</span>  <button class="add"> Add </button></p>
-        <input type="text" v-model="form.responces" />
+    
+      <label for="responses">
+        <p>Responses <span class="required"> *</span>  <button @click="addResponse()" class="add"> Add </button></p>
+        <input ref="responses" :class="{ 'is-invalid':  submitted &&  $v.form.responses.$error }" type="text" v-model="form.responses" />
       </label>
 
       <label for="context-set">
         <p>Context Set</p>
-        <input type="text" v-model="form.context_set" />
+        <input  ref="context-set" type="text" v-model="form.context_set" />
       </label>
       <label for="context-filter">
         <p>Context Filter</p>
-        <input type="text" v-model="form.context_filter"/>
+        <input ref="context-filter" type="text" v-model="form.context_filter"/>
       </label>
        
     </form>
@@ -34,32 +34,75 @@
   <div class="btns">
    <button class="btn-clear" @click="clearForm()"> Clear Input </button>
      <button class="btn-submit" @click="submitForm()" type="submit"> Submit </button>
-     </div>
+     </div> 
 </div>
 </template>
 
 <script>
+import { validationMixin } from 'vuelidate'
+import { required } from 'vuelidate/lib/validators'
 export default {
   name: "App",
+    mixins: [validationMixin],
   data() {
    return {
      form: {
        tag: "",
-       pattern: "",
-       responces: "",
+       pattern: [] ,
+       responses: [],
        context_set: "",
        context_filter: ""
-     }
-
+     },
+     submitted: false
    }
-      
+   
     
+  },
+  validations: {
+    form: {
+    tag: {
+      required,
+      
+    },
+    pattern: {
+     required
+          },
+           responses: {
+     required
+          }
+    },
+
   },
   methods: {
     clearForm(){
-    this.$refs.form.reset(); 
-    
-    }
+    this.form.tag = '';
+    this.form.pattern = [];
+    this.form.responses = [];
+    this.form.context_set = "";
+    this.form.context_filter = "";
+
+        },
+        submitForm(){
+           this.submitted = true;
+             this.$v.$touch();
+      if (this.$v.$invalid) {
+        return;
+      }
+        },
+         addPattern(){
+        let pattern = [];
+        pattern.push( this.form.pattern);       
+         
+                 console.log(pattern);
+        return pattern;
+        },
+        addResponse(){
+        let response = [];
+        response.push( this.form.responses);       
+            this.form.responses = [];
+                 console.log(response);
+        return response;
+        }
   }
 };
 </script>
@@ -79,7 +122,7 @@ export default {
   display: inline;
 }
 
-.registration {
+.inputs {
   margin: 0 auto;
 }
 label p{
@@ -123,6 +166,13 @@ input {
   border: 1px solid #DC143C;
   background-color:#DC143C;
    float: right;
+}
+input.is-invalid {
+  border-color: red;
+}
+
+.invalid {
+  color: red;
 }
 
 .add{
