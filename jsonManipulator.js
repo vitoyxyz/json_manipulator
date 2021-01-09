@@ -14,14 +14,7 @@ module.exports = {
     },
 
     readFile: async function () {
-        data = await fs.readFile('./json/intents.json', 'utf8', (err, data) => {
-            if (err) {
-                console.error(err)
-                return
-            }
-            return JSON.stringify(data);
-        })
-        return data;
+        return data = await fs.readFile('./json/intents.json', 'utf8')
     },
 
     updateFIle: function () {

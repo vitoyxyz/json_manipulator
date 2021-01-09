@@ -6,18 +6,114 @@ const app = express()
 const port = 3030
 
 const jsonManipulator = require('./jsonManipulator');
+const {
+    json,
+    response
+} = require('express')
 
 
-app.use(bodyParser.json())
+
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
+
+// parse application/json
+app.use(bodyParser.json());
 
 
 app.get('/', (req, res) => {
-    // jsonManipulator.createFile();
-    // let data = jsonManipulator.readFile();
-    console.log(jsonManipulator.readFile().then(data => console.log(data)));
+
     res.json({
         json: 0
     })
+
+})
+
+app.get('/get_json_file', (req, res) => {
+
+    jsonFile = jsonManipulator.readFile()
+
+    jsonFile.then(data => {
+        res.json({
+            json: JSON.stringify(data)
+        })
+
+    })
+})
+
+app.post('/create_entry', (req, res) => {
+
+    //tag*, response*, pattern*, context_filter, context_set
+    reqData = req.body;
+    if (reqData.tag == undefined || reqData.tag == null || reqData.tag == '') {
+
+        res.status(400).send('Tag is required')
+
+
+
+    }
+    if (reqData.response == undefined || reqData.response == null || reqData.response == '') {
+
+        res.status(400).send('Response is required')
+
+
+
+    }
+    if (reqData.pattern == undefined || reqData.pattern == null || reqData.pattern == '') {
+
+        res.status(400).send('Response is required')
+
+
+
+    }
+    jsonFile = jsonManipulator.readFile()
+    let json1
+
+
+    json1 = jsonFile.then(data => {
+        return JSON.parse(data)
+    }).then(parsedJson => {
+        if (reqData.context_filter != undefined && reqData.context_filter != null && reqData.context_filter != '') {
+            // find the elements with same context_set as the context_filter of the request,
+            // get their response and pattern and you append them, together and add them to the
+            // pattern of the new entry.
+            arr_context_set = parsedJson.intents.filter(obj => {
+
+                return obj.context_set == reqData.context_filter
+
+
+            })
+
+            console.log(arr_context_set)
+
+            new_pattern = [];
+            arr_context_set[0].patterns.forEach(pattern => {
+                arr_context_set[0].responses.forEach(response => {
+                    str = response + pattern;
+                    console.log(str)
+                    new_pattern.push(str)
+                })
+            });
+            console.log(new_pattern);
+
+            new_obt = {
+                tag: reqData.tag,
+                patterns: new_pattern,
+                responses: reqData.response,
+                context_set: reqData.context_set,
+
+            }
+            parsedJson.intents.push(new_obt)
+            console.log(parsedJson)
+        }
+    })
+
+
+
+
+
+
 
 })
 
