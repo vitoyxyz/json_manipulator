@@ -17,10 +17,11 @@ module.exports = {
         return data = await fs.readFile('./json/intents.json', 'utf8')
     },
 
-    updateFIle: function () {
+    writeFile: async function (file_content) {
 
-        console.log('Update File!')
+        return await fs.writeFile('./json/intents.json', file_content)
 
     }
+
 
 }

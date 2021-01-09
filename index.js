@@ -68,10 +68,10 @@ app.post('/create_entry', (req, res) => {
 
     }
     jsonFile = jsonManipulator.readFile()
-    let json1
 
 
-    json1 = jsonFile.then(data => {
+
+    jsonFile.then(data => {
         return JSON.parse(data)
     }).then(parsedJson => {
         if (reqData.context_filter != undefined && reqData.context_filter != null && reqData.context_filter != '') {
@@ -85,28 +85,61 @@ app.post('/create_entry', (req, res) => {
 
             })
 
-            console.log(arr_context_set)
+            // console.log(arr_context_set)
 
             new_pattern = [];
             arr_context_set[0].patterns.forEach(pattern => {
                 arr_context_set[0].responses.forEach(response => {
                     str = response + pattern;
-                    console.log(str)
+                    // console.log(str)
                     new_pattern.push(str)
                 })
             });
-            console.log(new_pattern);
+            // console.log(new_pattern);
 
-            new_obt = {
+            new_obj = {
                 tag: reqData.tag,
                 patterns: new_pattern,
                 responses: reqData.response,
                 context_set: reqData.context_set,
+                context_filter: reqData.context_filter
 
             }
-            parsedJson.intents.push(new_obt)
-            console.log(parsedJson)
+            parsedJson.intents.push(new_obj)
+            return parsedJson
+        } else {
+
+            new_obj = {
+                tag: reqData.tag,
+                patterns: reqData.pattern,
+                responses: reqData.response,
+                context_set: reqData.context_set,
+            }
+
+            parsedJson.intents.push(new_obj)
+            return parsedJson
         }
+    }).then(writeJson => {
+
+        jsonManipulator.writeFile(JSON.stringify(writeJson))
+
+        // console.log(writeJson)
+
+
+
+
+
+
+        res.status(200).json({
+            message: 'Saved!'
+        })
+
+
+    }).catch(err => {
+        res.status(500).json({
+            err: 'Some thing went wrong!. Try again.'
+        })
+
     })
 
 
