@@ -41,6 +41,7 @@
 <script>
 import { validationMixin } from 'vuelidate'
 import { required } from 'vuelidate/lib/validators'
+import axios from 'axios'
 export default {
   name: "App",
     mixins: [validationMixin],
@@ -90,6 +91,13 @@ export default {
       if (this.$v.$invalid) {
         return;
       }
+      axios.post('//localhost:3030/create_entry,', this.form)
+    .then((response) => {
+           this.submitted = true;
+  console.log(response);
+}, (error) => {
+  console.log(error);
+});
         },
          addPattern(){
            if(this.pattern !== ""){
