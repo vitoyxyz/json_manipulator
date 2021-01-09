@@ -26,7 +26,7 @@ app.use(cors({
     'allowedHeaders': ['Content-Type'],
     'origin': '*',
     'preflightContinue': true
-  }));
+}));
 
 app.get('/', (req, res) => {
 
@@ -144,6 +144,13 @@ app.post('/create_entry', (req, res) => {
         }
 
     })
+
+
+})
+
+// Go through all the elements and do the logic with context_set and context_filter
+
+app.post('/implement_logic', (req, res) => {
 
 
 })
