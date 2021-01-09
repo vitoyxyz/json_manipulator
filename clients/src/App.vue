@@ -10,13 +10,13 @@
  
         <label for="pattern">
           <p>Pattern <span class="required"> *</span> <button @click="addPattern()" class="add"> Add </button></p>
-          <input  ref="pattern" :class="{ 'is-invalid': submitted && $v.form.pattern.$error }" type="text" v-model="form.pattern" />
+          <input  ref="pattern" :class="{ 'is-invalid': submitted && $v.form.pattern.$error }" type="text" v-model="pattern" />
         </label>
     
     
       <label for="responses">
         <p>Responses <span class="required"> *</span>  <button @click="addResponse()" class="add"> Add </button></p>
-        <input ref="responses" :class="{ 'is-invalid':  submitted &&  $v.form.responses.$error }" type="text" v-model="form.responses" />
+        <input ref="responses" :class="{ 'is-invalid':  submitted &&  $v.form.responses.$error }" type="text" v-model="responses" />
       </label>
 
       <label for="context-set">
@@ -92,14 +92,17 @@ export default {
       }
         },
          addPattern(){
-         this.pattern.push( this.form.pattern); 
-         console.log(this.pattern);  
-         this.form.pattern = "";   
+           if(this.pattern !== ""){
+         this.form.pattern.push( this.pattern); 
+         this.pattern = "";   
+           }
         },
         addResponse(){
-           this.responses.push( this.form.responses);
-           console.log(this.responses);
-           this.form.responses = "";   
+          if(this.responses !== ""){
+           this.form.responses.push( this.responses);
+           this.responses = "";   
+          }
+           
         }
   }
 };
