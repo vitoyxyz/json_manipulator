@@ -3,6 +3,7 @@ const bodyParser = require('body-parser')
 const path = require('path')
 const fs = require('fs')
 const app = express()
+const cors = require('cors');
 const port = 3030
 
 const jsonManipulator = require('./jsonManipulator');
@@ -21,6 +22,11 @@ app.use(bodyParser.urlencoded({
 // parse application/json
 app.use(bodyParser.json());
 
+app.use(cors({
+    'allowedHeaders': ['Content-Type'],
+    'origin': '*',
+    'preflightContinue': true
+  }));
 
 app.get('/', (req, res) => {
 
@@ -123,11 +129,6 @@ app.post('/create_entry', (req, res) => {
 
         jsonManipulator.writeFile(JSON.stringify(writeJson))
 
-        // console.log(writeJson)
-
-
-
-
 
 
         res.status(200).json({
@@ -136,16 +137,13 @@ app.post('/create_entry', (req, res) => {
 
 
     }).catch(err => {
-        res.status(500).json({
-            err: 'Some thing went wrong!. Try again.'
-        })
+        if (!res.headersSent) {
+            res.status(500).json({
+                err: 'Some thing went wrong!. Try again.'
+            })
+        }
 
     })
-
-
-
-
-
 
 
 })
