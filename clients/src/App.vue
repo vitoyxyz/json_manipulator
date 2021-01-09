@@ -53,7 +53,9 @@ export default {
        context_set: "",
        context_filter: ""
      },
-     submitted: false
+     submitted: false,
+     pattern: [],
+     responses: []
    }
    
     
@@ -90,18 +92,14 @@ export default {
       }
         },
          addPattern(){
-        let pattern = [];
-        pattern.push( this.form.pattern);       
-         
-                 console.log(pattern);
-        return pattern;
+         this.pattern.push( this.form.pattern); 
+         console.log(this.pattern);  
+         this.form.pattern = "";   
         },
         addResponse(){
-        let response = [];
-        response.push( this.form.responses);       
-            this.form.responses = [];
-                 console.log(response);
-        return response;
+           this.responses.push( this.form.responses);
+           console.log(this.responses);
+           this.form.responses = "";   
         }
   }
 };
