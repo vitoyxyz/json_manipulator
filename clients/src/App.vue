@@ -130,6 +130,7 @@ export default {
       }
      
       axios.post("//localhost:3030/create_entry", this.form).then(
+       
         (response) => {
           this.submitted = true;
           console.log(response);
