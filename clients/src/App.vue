@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="app">
     <div class="form">
       <form ref="form" @submit.prevent="submitForm" class="inputs">
         <label for="tag">
@@ -16,7 +16,7 @@
         <label for="pattern">
           <p>
             Pattern <span class="required"> *</span>
-            <button @click="addPattern()" type="button"  class="add">Add</button>
+            <button @click="addPattern()" type="button" class="add">Add</button>
           </p>
           <input
             ref="pattern"
@@ -29,7 +29,9 @@
         <label for="response">
           <p>
             Responses <span class="required"> *</span>
-            <button @click="addResponse()" type="button" class="add">Add</button>
+            <button @click="addResponse()" type="button" class="add">
+              Add
+            </button>
           </p>
           <input
             ref="response"
@@ -58,11 +60,12 @@
       <button class="btn-submit" @click="submitForm()" type="submit">
         Submit
       </button>
-    
+      <div class="click-only" @click="sortAndSave()">
+        <p style="margin:5px">Click only if you added all elements</p>
+        <button class="btn-sort">Sort & Save</button>
+        <circle-spin v-if="isLoading"></circle-spin>
+      </div>
     </div>
-        <button class="btn-sort" @click="sortAndSave()">
-        Sort &  Save  <circle-spin v-bind:loading="isLoading"></circle-spin>
-      </button>
   </div>
 </template>
 
@@ -85,7 +88,7 @@ export default {
       submitted: false,
       pattern: [],
       response: [],
-      isLoading: true
+      isLoading: false,
     };
   },
   validations: {
@@ -112,47 +115,53 @@ export default {
     submitForm() {
       this.submitted = true;
       this.$v.$touch();
-        if (
+      if (
         this.$v.$invalid &&
         this.form.patterns.length == 0 &&
-        this.form.responses.length == 0 
-      )
-      {
+        this.form.responses.length == 0
+      ) {
         return;
-      }
-  
-      else{
-         this.form.patterns.push(this.pattern);
-              this.form.responses.push(this.response);
-      }
-     
-      axios.post("//localhost:3030/create_entry", this.form).then(
-        (response) => {
-          this.submitted = true;
-          console.log(response);
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-    
-    },
-    sortAndSave(){
-        this.submitted = true;
-        console.log(this.submitted);
-    },
-    addPattern() {
-      if (this.pattern !== "") {
-        this.form.patterns.push(this.pattern);
-        this.pattern = "";
-      }
-    },
-    addResponse() {
-      if (this.responses !== "") {
+      } else {
+        if (this.pattern !== "" && this.response !== "")
+          this.form.patterns.push(this.pattern);
         this.form.responses.push(this.response);
-        this.response = "";
       }
+
+      axios
+        .post("//localhost:3030/create_entry", this.form)
+        .then((response) => {
+          this.submitted = true;
+          alert(response.data.message);
+          this.clearForm();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
+    sortAndSave() {
+      this.isLoading = true;
+      axios
+        .post("//localhost:3030/create_entry")
+        .then((response) => {
+          alert(response.data.message);
+          this.isLoading = false;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+  },
+  addPattern() {
+    if (this.pattern !== "") {
+      this.form.patterns.push(this.pattern);
+      this.pattern = "";
+    }
+  },
+  addResponse() {
+    if (this.responses !== "") {
+      this.form.responses.push(this.response);
+      this.response = "";
+    }
   },
 };
 </script>
@@ -171,12 +180,14 @@ export default {
 .add {
   display: inline;
 }
-
+.app {
+  font-family: "Times New Roman", Times, serif;
+}
 .inputs {
   margin: 0 auto;
 }
 label p {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 600;
 }
 
@@ -187,12 +198,14 @@ input {
   margin-right: 10px;
   outline: none;
   border: 1px solid #d1d3d4;
+  padding: 10px;
+  font-size: 17px;
 }
 .btns {
   max-width: 350px;
   margin: 0 auto;
   width: 100%;
-  padding: 30px;
+  padding: 50px;
 }
 .btn-clear {
   color: #ffffff;
@@ -204,6 +217,7 @@ input {
   background-color: #b80000;
   float: left;
   margin-left: -9px;
+  outline: none;
 }
 
 .btn-submit {
@@ -212,22 +226,28 @@ input {
   font-size: 17px;
   height: 58px;
   width: 100px;
-    border: 1px solid#094a00;
+  border: 1px solid#094a00;
   background-color: #094a00;
-   float: right;
+  float: right;
+  outline: none;
 }
-
-.btn-sort{
+.click-only {
+  margin-top: 90px;
+  font-size: 22px;
+  color: #e30f00;
+  font-weight: 550;
+}
+.btn-sort {
   color: #ffffff;
   box-sizing: border-box;
-  font-size: 17px;
-  height: 58px;
+  font-size: 20px;
+  height: 50px;
   width: 355px;
-  margin: 45px -100px;
-  border: 1px solid #8f0000;
-  background-color: #8f0000;
- text-align: center;
- position: absolute;
+  border: 1px solid#e30f00;
+  background-color: #e30f00;
+  text-align: center;
+  position: absolute;
+  outline: none;
 }
 
 input.is-invalid {
@@ -243,11 +263,12 @@ input.is-invalid {
   box-sizing: border-box;
   font-size: 15px;
   height: 30px;
-  width: 50px;
- border: 1px solid #b80000;
+  width: 70px;
+  border: 1px solid #b80000;
   background-color: #b80000;
   float: right;
   margin-right: 12px;
+  outline: none;
 }
 .required {
   color: #f50537;
@@ -255,7 +276,8 @@ input.is-invalid {
   line-height: 20px;
 }
 .sk-fading-circle {
-  margin: 0px;
+  margin: 5px 20px !important;
+  float: right;
 }
 </style>>
 
