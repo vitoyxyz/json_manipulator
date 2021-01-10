@@ -123,11 +123,14 @@ export default {
       {
         return;
       }
-  
       else{
+        if(this.pattern !== "" && this.response !== "")
          this.form.patterns.push(this.pattern);
               this.form.responses.push(this.response);
+              
       }
+  
+      
      
       axios.post("//localhost:3030/create_entry", this.form).then(
        
