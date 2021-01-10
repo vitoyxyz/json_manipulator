@@ -158,33 +158,80 @@ app.post('/create_entry', (req, res) => {
 
 // Go through all the elements and do the logic with context_set and context_filter
 
-// app.post('/implement_logic', (req, res) => {
+app.post('/implement_logic', (req, res) => {
 
-//     fileData = jsonManipulator.readFile();
-
-//     fileData.then(data => {
-//         return JSON.parse(data)
-//     }).then(data => {
-//         console.log(data)
-//         if (!data == '' || !'intents' in data) {
-//             // Get all elements with proporty context_filter
+    fileData = jsonManipulator.readFile();
 
 
+    fileData.then(data => {
+        if (data == '') {
+            if (!res.headersSent) {
+                res.status(500).json({
+                    message: 'json File Is Empty'
+                })
+                return
+            }
+        }
+
+        parsed = JSON.parse(data)
+
+        if ('intents' in parsed && !parsed.intents.length == 0) {
+            return parsed
+        } else {
+            res.status(500).json({
+                message: 'No Data or Wrong JSON structure To Sort!'
+            })
+            return
+        }
 
 
+    }).then(data => {
+        // Get all elements with proporty context_filter
+        let res, parr, temp = [];
+        for (let index = 0; index < data.intents.length; index++) {
+            temp = []
+            if ('context_filter' in data.intents[index]) {
 
+                parr = data.intents[index].patterns;
+                // console.log(res)
 
+                for (let index1 = 0; index1 < data.intents.length; index1++) {
+                    if (data.intents[index].context_filter === data.intents[index1].context_set) {
+                        res = data.intents[index1].responses;
+                        for (let i = 0; i < parr.length; i++) {
+                            for (let j = 0; j < res.length; j++) {
 
-//             console.log(context_filter_data)
-//         }
+                                temp.push(res[j] + ' ' + parr[i])
 
-//     })
+                            }
+                        }
+                        console.log(data.intents[index], data.intents[index1])
+                        data.intents[index].patterns = temp;
+                    }
+                }
 
+            }
+        }
 
+        return data;
 
+    }).then(writeJson => {
 
+        jsonManipulator.writeFile(JSON.stringify(writeJson))
 
-// })
+        res.status(200).json({
+            message: 'Sorted!'
+        })
+
+    }).catch(err => {
+        if (!res.headersSent) {
+            console.log(err)
+            res.status(500).json({
+                err: 'Some thing went wrong!. Try again.'
+            })
+        }
+    })
+})
 
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
