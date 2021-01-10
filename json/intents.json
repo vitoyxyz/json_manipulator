@@ -1,1 +1,1 @@
-{"intents":[{"tag":"qwe","patterns":["qwe","",""],"responses":["qwe","",""]},{"tag":"qwe","patterns":["qwe",""],"responses":["qwe",""],"context_set":"qwe","context_filter":"qwe"}]}
+{"intents":[{"tag":"qwe123123123asdasd","pattern":"qwe123123","response":"How are we doing?","context_set":"123","context_filter":"qwe 123 "}]}
