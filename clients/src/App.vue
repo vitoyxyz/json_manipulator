@@ -58,7 +58,11 @@
       <button class="btn-submit" @click="submitForm()" type="submit">
         Submit
       </button>
+    
     </div>
+        <button class="btn-sort">
+        Sort &  Save
+      </button>
   </div>
 </template>
 
@@ -99,8 +103,8 @@ export default {
   methods: {
     clearForm() {
       this.form.tag = "";
-      this.form.patterns = [];
-      this.form.responses = [];
+      this.pattern = [];
+      this.response = [];
       this.form.context_set = "";
       this.form.context_filter = "";
     },
@@ -184,9 +188,9 @@ input {
   box-sizing: border-box;
   font-size: 17px;
   height: 58px;
-  width: 120px;
-  border: 1px solid #228b22;
-  background-color: #228b22;
+  width: 100px;
+  border: 1px solid #b80000;
+  background-color: #b80000;
   float: left;
   margin-left: -9px;
 }
@@ -196,11 +200,25 @@ input {
   box-sizing: border-box;
   font-size: 17px;
   height: 58px;
-  width: 120px;
-  border: 1px solid #dc143c;
-  background-color: #dc143c;
-  float: right;
+  width: 100px;
+    border: 1px solid#094a00;
+  background-color: #094a00;
+   float: right;
 }
+
+.btn-sort{
+  color: #ffffff;
+  box-sizing: border-box;
+  font-size: 17px;
+  height: 58px;
+  width: 355px;
+  margin: 45px -100px;
+  border: 1px solid #8f0000;
+  background-color: #8f0000;
+ text-align: center;
+ position: absolute;
+}
+
 input.is-invalid {
   border-color: red;
 }
@@ -215,8 +233,8 @@ input.is-invalid {
   font-size: 15px;
   height: 30px;
   width: 50px;
-  border: 1px solid #dc143c;
-  background-color: #dc143c;
+ border: 1px solid #b80000;
+  background-color: #b80000;
   float: right;
   margin-right: 12px;
 }
