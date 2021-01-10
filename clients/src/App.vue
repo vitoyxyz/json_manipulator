@@ -60,7 +60,7 @@
       </button>
     
     </div>
-        <button class="btn-sort">
+        <button class="btn-sort" @click="sortAndSave()">
         Sort &  Save
       </button>
   </div>
@@ -127,6 +127,10 @@ export default {
           console.log(error);
         }
       );
+    },
+    sortAndSave(){
+        this.submitted = true;
+        console.log(this.submitted);
     },
     addPattern() {
      
