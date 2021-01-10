@@ -16,7 +16,7 @@
         <label for="pattern">
           <p>
             Pattern <span class="required"> *</span>
-            <button @click="addPattern()" type="button"  class="add">Add</button>
+            <button @click="addPattern()" type="button" class="add">Add</button>
           </p>
           <input
             ref="pattern"
@@ -29,7 +29,9 @@
         <label for="response">
           <p>
             Responses <span class="required"> *</span>
-            <button @click="addResponse()" type="button" class="add">Add</button>
+            <button @click="addResponse()" type="button" class="add">
+              Add
+            </button>
           </p>
           <input
             ref="response"
@@ -58,14 +60,11 @@
       <button class="btn-submit" @click="submitForm()" type="submit">
         Submit
       </button>
-    
     </div>
     <div @click="sortAndSave()">
-        <button class="btn-sort" >
-        Sort &  Save 
-      </button>
-       <circle-spin v-if="isLoading"></circle-spin>
-       </div>
+      <button class="btn-sort">Sort & Save</button>
+      <circle-spin v-if="isLoading"></circle-spin>
+    </div>
   </div>
 </template>
 
@@ -88,7 +87,7 @@ export default {
       submitted: false,
       pattern: [],
       response: [],
-      isLoading: false
+      isLoading: false,
     };
   },
   validations: {
@@ -115,38 +114,32 @@ export default {
     submitForm() {
       this.submitted = true;
       this.$v.$touch();
-        if (
+      if (
         this.$v.$invalid &&
         this.form.patterns.length == 0 &&
-        this.form.responses.length == 0 
-      )
-      {
+        this.form.responses.length == 0
+      ) {
         return;
+      } else {
+        if (this.pattern !== "" && this.response !== "")
+          this.form.patterns.push(this.pattern);
+        this.form.responses.push(this.response);
       }
-      else{
-        if(this.pattern !== "" && this.response !== "")
-         this.form.patterns.push(this.pattern);
-              this.form.responses.push(this.response);
-              
-      }
-  
-      
-     
-      axios.post("//localhost:3030/create_entry", this.form).then(
-       
-        (response) => {
+
+      axios
+        .post("//localhost:3030/create_entry", this.form)
+        .then((response) => {
           this.submitted = true;
-          console.log(response);
-        },
-        (error) => {
-          console.log(error);
-        }
-      );
-    
+          alert(response.data.message);
+          this.clearForm();
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
-    sortAndSave(){
-        this.isLoading = true;
-        this.submitted = true;
+    sortAndSave() {
+      this.isLoading = true;
+      this.submitted = true;
       console.log(this.submitted);
     },
     addPattern() {
@@ -212,6 +205,7 @@ input {
   background-color: #b80000;
   float: left;
   margin-left: -9px;
+  outline: none;
 }
 
 .btn-submit {
@@ -220,12 +214,13 @@ input {
   font-size: 17px;
   height: 58px;
   width: 100px;
-    border: 1px solid#094a00;
+  border: 1px solid#094a00;
   background-color: #094a00;
-   float: right;
+  float: right;
+  outline: none;
 }
 
-.btn-sort{
+.btn-sort {
   color: #ffffff;
   box-sizing: border-box;
   font-size: 17px;
@@ -234,8 +229,9 @@ input {
   margin: 45px -100px;
   border: 1px solid#e30f00;
   background-color: #e30f00;
- text-align: center;
- position: absolute;
+  text-align: center;
+  position: absolute;
+  outline: none;
 }
 
 input.is-invalid {
@@ -252,10 +248,11 @@ input.is-invalid {
   font-size: 15px;
   height: 30px;
   width: 50px;
- border: 1px solid #b80000;
+  border: 1px solid #b80000;
   background-color: #b80000;
   float: right;
   margin-right: 12px;
+  outline: none;
 }
 .required {
   color: #f50537;
@@ -265,7 +262,6 @@ input.is-invalid {
 .sk-fading-circle {
   margin: 50px -15px !important;
   float: right;
-   
 }
 </style>>
 
