@@ -56,7 +56,7 @@ app.post('/create_entry', (req, res) => {
             return
         }
     }
-    if (!'response' in reqData && reqData.response.length == 0) {
+    if (!'responses' in reqData && reqData.responses.length == 0) {
         if (!res.headersSent) {
 
             res.status(400).send('Response is required')
@@ -64,7 +64,7 @@ app.post('/create_entry', (req, res) => {
 
         }
     }
-    if ('pattern' in reqData && reqData.pattern.length == 0) {
+    if ('patterns' in reqData && reqData.patterns.length == 0) {
 
         if (!res.headersSent) {
 

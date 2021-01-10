@@ -1,0 +1,1 @@
+{"intents":[{"tag":"qwe","patterns":["qwe","",""],"responses":["qwe","",""]},{"tag":"qwe","patterns":["qwe",""],"responses":["qwe",""],"context_set":"qwe","context_filter":"qwe"}]}
