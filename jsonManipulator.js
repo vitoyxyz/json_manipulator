@@ -1,15 +1,15 @@
 const fs = require('fs').promises
 
-let obj = {}
-
-
-
-
 module.exports = {
 
-    createFile: function () {
+    createFile: async function (content) {
 
-        console.log('Create File!');
+        return await fs.writeFile('./json/intents.json', content)
+    },
+
+    fileExists: async function () {
+
+        return await fs.access('./json/intents.json')
 
     },
 
