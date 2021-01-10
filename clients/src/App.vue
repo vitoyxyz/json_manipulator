@@ -61,7 +61,7 @@
     
     </div>
         <button class="btn-sort" @click="sortAndSave()">
-        Sort &  Save
+        Sort &  Save  <circle-spin loading="isLoading"></circle-spin>
       </button>
   </div>
 </template>
@@ -160,7 +160,7 @@ export default {
 };
 </script>
 
-<style scoped>
+<style>
 .form {
   display: flex;
   flex-direction: row;
@@ -256,6 +256,9 @@ input.is-invalid {
   color: #f50537;
   size: 15px;
   line-height: 20px;
+}
+div.sk-fading-circle .sk-circle{
+  margin: 0px;
 }
 </style>>
 
