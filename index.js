@@ -49,6 +49,7 @@ app.post('/create_entry', (req, res) => {
     reqData = req.body;
     if (!'tag' in reqData && reqData.tag == undefined || reqData.tag == null || reqData.tag == '') {
 
+
         if (!res.headersSent) {
 
             res.status(400).send('Tag is required')

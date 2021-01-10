@@ -16,26 +16,26 @@
         <label for="pattern">
           <p>
             Pattern <span class="required"> *</span>
-            <button @click="addPattern()" class="add">Add</button>
+            <button @click="addPattern()" type="button"  class="add">Add</button>
           </p>
           <input
             ref="pattern"
-            :class="{ 'is-invalid': submitted && $v.form.pattern.$error }"
+            :class="{ 'is-invalid': submitted && $v.pattern.$error }"
             type="text"
             v-model="pattern"
           />
         </label>
 
-        <label for="responses">
+        <label for="response">
           <p>
             Responses <span class="required"> *</span>
-            <button @click="addResponse()" class="add">Add</button>
+            <button @click="addResponse()" type="button" class="add">Add</button>
           </p>
           <input
-            ref="responses"
-            :class="{ 'is-invalid': submitted && $v.form.responses.$error }"
+            ref="response"
+            :class="{ 'is-invalid': submitted && $v.response.$error }"
             type="text"
-            v-model="responses"
+            v-model="response"
           />
         </label>
 
@@ -58,7 +58,11 @@
       <button class="btn-submit" @click="submitForm()" type="submit">
         Submit
       </button>
+    
     </div>
+        <button class="btn-sort" @click="sortAndSave()">
+        Sort &  Save
+      </button>
   </div>
 </template>
 
@@ -73,25 +77,25 @@ export default {
     return {
       form: {
         tag: "",
-        pattern: [],
+        patterns: [],
         responses: [],
         context_set: "",
         context_filter: "",
       },
       submitted: false,
       pattern: [],
-      responses: [],
+      response: [],
     };
   },
   validations: {
+    pattern: {
+      required,
+    },
+    response: {
+      required,
+    },
     form: {
       tag: {
-        required,
-      },
-      pattern: {
-        required,
-      },
-      responses: {
         required,
       },
     },
@@ -99,17 +103,32 @@ export default {
   methods: {
     clearForm() {
       this.form.tag = "";
-      this.form.pattern = [];
-      this.form.responses = [];
+      this.pattern = [];
+      this.response = [];
       this.form.context_set = "";
       this.form.context_filter = "";
     },
     submitForm() {
       this.submitted = true;
       this.$v.$touch();
-      if (this.$v.$invalid) {
+        if (
+        this.$v.$invalid &&
+        this.form.patterns.length == 0 &&
+        this.form.responses.length == 0 
+      )
+      {
         return;
       }
+      else if (this.pattern == "" && this.form.patterns.length  > 0  && this.response == "" &&  this.form.responses.length > 0 ){
+        this.$v.$error == false;
+          this.form.patterns.push(this.pattern);
+              this.form.responses.push(this.response);
+      }
+      else{
+         this.form.patterns.push(this.pattern);
+              this.form.responses.push(this.response);
+      }
+     
       axios.post("//localhost:3030/create_entry", this.form).then(
         (response) => {
           this.submitted = true;
@@ -119,17 +138,22 @@ export default {
           console.log(error);
         }
       );
+    
+    },
+    sortAndSave(){
+        this.submitted = true;
+        console.log(this.submitted);
     },
     addPattern() {
       if (this.pattern !== "") {
-        this.form.pattern.push(this.pattern);
+        this.form.patterns.push(this.pattern);
         this.pattern = "";
       }
     },
     addResponse() {
       if (this.responses !== "") {
-        this.form.responses.push(this.responses);
-        this.responses = "";
+        this.form.responses.push(this.response);
+        this.response = "";
       }
     },
   },
@@ -178,9 +202,9 @@ input {
   box-sizing: border-box;
   font-size: 17px;
   height: 58px;
-  width: 120px;
-  border: 1px solid #228b22;
-  background-color: #228b22;
+  width: 100px;
+  border: 1px solid #b80000;
+  background-color: #b80000;
   float: left;
   margin-left: -9px;
 }
@@ -190,11 +214,25 @@ input {
   box-sizing: border-box;
   font-size: 17px;
   height: 58px;
-  width: 120px;
-  border: 1px solid #dc143c;
-  background-color: #dc143c;
-  float: right;
+  width: 100px;
+    border: 1px solid#094a00;
+  background-color: #094a00;
+   float: right;
 }
+
+.btn-sort{
+  color: #ffffff;
+  box-sizing: border-box;
+  font-size: 17px;
+  height: 58px;
+  width: 355px;
+  margin: 45px -100px;
+  border: 1px solid #8f0000;
+  background-color: #8f0000;
+ text-align: center;
+ position: absolute;
+}
+
 input.is-invalid {
   border-color: red;
 }
@@ -209,8 +247,8 @@ input.is-invalid {
   font-size: 15px;
   height: 30px;
   width: 50px;
-  border: 1px solid #dc143c;
-  background-color: #dc143c;
+ border: 1px solid #b80000;
+  background-color: #b80000;
   float: right;
   margin-right: 12px;
 }
