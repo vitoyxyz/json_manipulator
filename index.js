@@ -84,7 +84,41 @@ app.post('/create_entry', (req, res) => {
 
     }
 
-    jsonManipulator.fileExists().then().catch(err => {
+    jsonManipulator.fileExists().then(el => {
+        jsonFile = jsonManipulator.readFile()
+        jsonFile.then(data => {
+            if (data == '') {
+                obj = {
+                    intents: []
+                }
+                return obj
+            } else {
+                return JSON.parse(data)
+            }
+
+        }).then(parsedJson => {
+
+            parsedJson.intents.push(reqData)
+            return parsedJson
+
+        }).then(writeJson => {
+
+            jsonManipulator.writeFile(JSON.stringify(writeJson))
+
+            res.status(200).json({
+                message: 'Saved!'
+            })
+
+        }).catch(err => {
+            if (!res.headersSent) {
+                console.log(err)
+                res.status(500).json({
+                    err: 'Some thing went wrong!. Try again.'
+                })
+            }
+
+        })
+    }).catch(err => {
 
         jsonManipulator.createFile(`{"intents": []}`).then().catch()
         jsonFile = jsonManipulator.readFile()
@@ -118,28 +152,75 @@ app.post('/create_entry', (req, res) => {
         return
     })
 
-    jsonFile = jsonManipulator.readFile()
-    jsonFile.then(data => {
+
+    // return
+})
+
+// Go through all the elements and do the logic with context_set and context_filter
+
+app.post('/implement_logic', (req, res) => {
+
+    fileData = jsonManipulator.readFile();
+
+
+    fileData.then(data => {
         if (data == '') {
-            obj = {
-                intents: []
+            if (!res.headersSent) {
+                res.status(500).json({
+                    message: 'json File Is Empty'
+                })
+                return
             }
-            return obj
-        } else {
-            return JSON.parse(data)
         }
 
-    }).then(parsedJson => {
+        parsed = JSON.parse(data)
 
-        parsedJson.intents.push(reqData)
-        return parsedJson
+        if ('intents' in parsed && !parsed.intents.length == 0) {
+            return parsed
+        } else {
+            res.status(500).json({
+                message: 'No Data or Wrong JSON structure To Sort!'
+            })
+            return
+        }
+
+
+    }).then(data => {
+        // Get all elements with proporty context_filter
+        let res, parr, temp = [];
+        for (let index = 0; index < data.intents.length; index++) {
+            temp = []
+            if ('context_filter' in data.intents[index]) {
+
+                parr = data.intents[index].patterns;
+                // console.log(res)
+
+                for (let index1 = 0; index1 < data.intents.length; index1++) {
+                    if (data.intents[index].context_filter === data.intents[index1].context_set) {
+                        res = data.intents[index1].responses;
+                        for (let i = 0; i < parr.length; i++) {
+                            for (let j = 0; j < res.length; j++) {
+
+                                temp.push(res[j] + ' ' + parr[i])
+
+                            }
+                        }
+                        console.log(data.intents[index], data.intents[index1])
+                        data.intents[index].patterns = temp;
+                    }
+                }
+
+            }
+        }
+
+        return data;
 
     }).then(writeJson => {
 
         jsonManipulator.writeFile(JSON.stringify(writeJson))
 
         res.status(200).json({
-            message: 'Saved!'
+            message: 'Sorted!'
         })
 
     }).catch(err => {
@@ -149,55 +230,8 @@ app.post('/create_entry', (req, res) => {
                 err: 'Some thing went wrong!. Try again.'
             })
         }
-
     })
-    // return
 })
-
-// Go through all the elements and do the logic with context_set and context_filter
-
-// app.post('/implement_logic', (req, res) => {
-
-//     fileData = jsonManipulator.readFile();
-
-//     fileData.then(data => {
-//         return JSON.parse(data)
-//     }).then(data => {
-//         console.log(data)
-//         if (!data == '' || !'intents' in data) {
-//             // Get all elements with proporty context_filter
-//             filtered_data = data.intents.forEach(el => {
-
-//                 if ('context_filter' in el) {
-//                     data.intents.forEach(el2 => {
-//                         if (el.context_filter === el2.context_set) {
-//                             return el.pattern = el2.response.forEach(el3 => {
-//                                 el.pattern.forEach(el4 => {
-//                                     return el3 + ' ' + el4;
-//                                 })
-
-//                             })
-//                         }
-//                     })
-//                 }
-
-//             })
-
-
-
-
-
-
-//             console.log(context_filter_data)
-//         }
-
-//     })
-
-
-
-
-
-// })
 
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
