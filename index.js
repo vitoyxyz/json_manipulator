@@ -8,11 +8,8 @@ const port = 3030
 
 const jsonManipulator = require('./jsonManipulator');
 const {
-    json,
-    response
+    json
 } = require('express')
-
-
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({
@@ -50,53 +47,102 @@ app.post('/create_entry', (req, res) => {
 
     //tag*, response*, pattern*, context_filter, context_set
     reqData = req.body;
-    if (reqData.tag == undefined || reqData.tag == null || reqData.tag == '') {
+    if (!'tag' in reqData && reqData.tag == undefined || reqData.tag == null || reqData.tag == '') {
 
-        res.status(400).send('Tag is required')
-
-    }
-    if (reqData.response == undefined || reqData.response == null || reqData.response == '') {
-
-        res.status(400).send('Response is required')
-
-    }
-    if (reqData.pattern == undefined || reqData.pattern == null || reqData.pattern == '') {
-
-        res.status(400).send('Response is required')
-
-    }
-    jsonFile = jsonManipulator.readFile()
-
-    jsonFile.then(data => {
-
-        return JSON.parse(data)
-
-    }).then(parsedJson => {
-
-        parsedJson.intents.push(reqData)
-        return parsedJson
-
-    }).then(writeJson => {
-
-        jsonManipulator.writeFile(JSON.stringify(writeJson))
-
-        res.status(200).json({
-            message: 'Saved!'
-        })
-
-    }).catch(err => {
         if (!res.headersSent) {
-            res.status(500).json({
-                err: 'Some thing went wrong!. Try again.'
-            })
-        }
 
+            res.status(400).send('Tag is required')
+            return
+        }
+    }
+    if (!'response' in reqData && reqData.response.length == 0) {
+        if (!res.headersSent) {
+
+            res.status(400).send('Response is required')
+            return
+
+        }
+    }
+    if ('pattern' in reqData && reqData.pattern.length == 0) {
+
+        if (!res.headersSent) {
+
+            res.status(400).send('Pattern is required')
+            return
+
+        }
+    }
+    if (reqData.context_set == undefined || reqData.context_set == null || reqData.context_set == '') {
+
+        delete reqData.context_set
+
+    }
+    if (reqData.context_filter == undefined || reqData.context_filter == null || reqData.context_filter == '') {
+
+        delete reqData.context_filter
+
+    }
+
+    jsonManipulator.fileExists().then().catch(err => {
+
+        jsonManipulator.createFile(`{"intents": []}`).then().catch(err => console.log(err))
+        jsonFile = jsonManipulator.readFile()
+
+        jsonFile.then(data => {
+            if (data == '') {
+                obj = {
+                    intents: []
+                }
+                return obj
+            } else {
+                return JSON.parse(data)
+            }
+
+        }).then(parsedJson => {
+
+            parsedJson.intents.push(reqData)
+            return parsedJson
+
+        }).then(writeJson => {
+
+            jsonManipulator.writeFile(JSON.stringify(writeJson))
+
+            res.status(200).json({
+                message: 'Saved!'
+            })
+
+        }).catch(err => {
+            if (!res.headersSent) {
+                console.log(err)
+                res.status(500).json({
+                    err: 'Some thing went wrong!. Try again.'
+                })
+            }
+
+        })
     })
+    // return
 })
 
 // Go through all the elements and do the logic with context_set and context_filter
 
 app.post('/implement_logic', (req, res) => {
+
+    fileData = jsonManipulator.readFile();
+
+    fileData.then(data => {
+        return JSON.parse(data)
+    }).then(data => {
+
+        // data.
+
+
+
+
+    })
+
+
+
 
 
 })
