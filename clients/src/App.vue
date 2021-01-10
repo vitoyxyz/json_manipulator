@@ -61,7 +61,7 @@
         Submit
       </button>
       <div class="click-only" @click="sortAndSave()">
-        <p>Click only if you added all elements</p>
+        <p style="margin:5px">Click only if you added all elements</p>
         <button class="btn-sort">Sort & Save</button>
         <circle-spin v-if="isLoading"></circle-spin>
       </div>
