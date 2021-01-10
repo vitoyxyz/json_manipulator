@@ -84,7 +84,41 @@ app.post('/create_entry', (req, res) => {
 
     }
 
-    jsonManipulator.fileExists().then().catch(err => {
+    jsonManipulator.fileExists().then(el => {
+        jsonFile = jsonManipulator.readFile()
+        jsonFile.then(data => {
+            if (data == '') {
+                obj = {
+                    intents: []
+                }
+                return obj
+            } else {
+                return JSON.parse(data)
+            }
+
+        }).then(parsedJson => {
+
+            parsedJson.intents.push(reqData)
+            return parsedJson
+
+        }).then(writeJson => {
+
+            jsonManipulator.writeFile(JSON.stringify(writeJson))
+
+            res.status(200).json({
+                message: 'Saved!'
+            })
+
+        }).catch(err => {
+            if (!res.headersSent) {
+                console.log(err)
+                res.status(500).json({
+                    err: 'Some thing went wrong!. Try again.'
+                })
+            }
+
+        })
+    }).catch(err => {
 
         jsonManipulator.createFile(`{"intents": []}`).then().catch()
         jsonFile = jsonManipulator.readFile()
@@ -118,39 +152,7 @@ app.post('/create_entry', (req, res) => {
         return
     })
 
-    jsonFile = jsonManipulator.readFile()
-    jsonFile.then(data => {
-        if (data == '') {
-            obj = {
-                intents: []
-            }
-            return obj
-        } else {
-            return JSON.parse(data)
-        }
 
-    }).then(parsedJson => {
-
-        parsedJson.intents.push(reqData)
-        return parsedJson
-
-    }).then(writeJson => {
-
-        jsonManipulator.writeFile(JSON.stringify(writeJson))
-
-        res.status(200).json({
-            message: 'Saved!'
-        })
-
-    }).catch(err => {
-        if (!res.headersSent) {
-            console.log(err)
-            res.status(500).json({
-                err: 'Some thing went wrong!. Try again.'
-            })
-        }
-
-    })
     // return
 })
 
@@ -166,7 +168,7 @@ app.post('/create_entry', (req, res) => {
 //         console.log(data)
 //         if (!data == '' || !'intents' in data) {
 //             // Get all elements with proporty context_filter
-        
+
 
 
 
