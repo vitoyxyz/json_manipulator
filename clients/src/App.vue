@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="app">
     <div class="form">
       <form ref="form" @submit.prevent="submitForm" class="inputs">
         <label for="tag">
@@ -138,9 +138,18 @@ export default {
         });
     },
     sortAndSave() {
-      this.isLoading = true;
-      this.submitted = true;
-      console.log(this.submitted);
+     this.isLoading = true;
+      axios
+        .post("//localhost:3030/create_entry")
+        .then((response) => {
+           alert(response.data.message);
+            this.isLoading = false;
+        })
+        .catch((err) => {
+         
+          console.log(err);
+        });
+    },
     },
     addPattern() {
       if (this.pattern !== "") {
@@ -154,7 +163,6 @@ export default {
         this.response = "";
       }
     },
-  },
 };
 </script>
 
@@ -172,12 +180,14 @@ export default {
 .add {
   display: inline;
 }
-
+.app{
+   font-family: "Times New Roman", Times, serif;
+}
 .inputs {
   margin: 0 auto;
 }
 label p {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 600;
 }
 
@@ -188,6 +198,8 @@ input {
   margin-right: 10px;
   outline: none;
   border: 1px solid #d1d3d4;
+  padding: 10px;
+  font-size: 17px;
 }
 .btns {
   max-width: 350px;
@@ -247,7 +259,7 @@ input.is-invalid {
   box-sizing: border-box;
   font-size: 15px;
   height: 30px;
-  width: 50px;
+  width: 70px;
   border: 1px solid #b80000;
   background-color: #b80000;
   float: right;
