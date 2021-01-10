@@ -61,7 +61,7 @@
     
     </div>
         <button class="btn-sort" @click="sortAndSave()">
-        Sort &  Save  <circle-spin loading="isLoading"></circle-spin>
+        Sort &  Save  <circle-spin v-bind:loading="isLoading"></circle-spin>
       </button>
   </div>
 </template>
@@ -85,6 +85,7 @@ export default {
       submitted: false,
       pattern: [],
       response: [],
+      isLoading: true
     };
   },
   validations: {
@@ -119,11 +120,7 @@ export default {
       {
         return;
       }
-      else if (this.pattern == "" && this.form.patterns.length  > 0  && this.response == "" &&  this.form.responses.length > 0 ){
-        this.$v.$error == false;
-          this.form.patterns.push(this.pattern);
-              this.form.responses.push(this.response);
-      }
+  
       else{
          this.form.patterns.push(this.pattern);
               this.form.responses.push(this.response);
@@ -257,7 +254,7 @@ input.is-invalid {
   size: 15px;
   line-height: 20px;
 }
-div.sk-fading-circle .sk-circle{
+.sk-fading-circle {
   margin: 0px;
 }
 </style>>
