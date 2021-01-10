@@ -60,10 +60,11 @@
       <button class="btn-submit" @click="submitForm()" type="submit">
         Submit
       </button>
-    </div>
-    <div @click="sortAndSave()">
-      <button class="btn-sort">Sort & Save</button>
-      <circle-spin v-if="isLoading"></circle-spin>
+      <div class="click-only" @click="sortAndSave()">
+        <p>Click only if you added all elements</p>
+        <button class="btn-sort">Sort & Save</button>
+        <circle-spin v-if="isLoading"></circle-spin>
+      </div>
     </div>
   </div>
 </template>
@@ -138,31 +139,30 @@ export default {
         });
     },
     sortAndSave() {
-     this.isLoading = true;
+      this.isLoading = true;
       axios
         .post("//localhost:3030/create_entry")
         .then((response) => {
-           alert(response.data.message);
-            this.isLoading = false;
+          alert(response.data.message);
+          this.isLoading = false;
         })
         .catch((err) => {
-         
           console.log(err);
         });
     },
-    },
-    addPattern() {
-      if (this.pattern !== "") {
-        this.form.patterns.push(this.pattern);
-        this.pattern = "";
-      }
-    },
-    addResponse() {
-      if (this.responses !== "") {
-        this.form.responses.push(this.response);
-        this.response = "";
-      }
-    },
+  },
+  addPattern() {
+    if (this.pattern !== "") {
+      this.form.patterns.push(this.pattern);
+      this.pattern = "";
+    }
+  },
+  addResponse() {
+    if (this.responses !== "") {
+      this.form.responses.push(this.response);
+      this.response = "";
+    }
+  },
 };
 </script>
 
@@ -180,8 +180,8 @@ export default {
 .add {
   display: inline;
 }
-.app{
-   font-family: "Times New Roman", Times, serif;
+.app {
+  font-family: "Times New Roman", Times, serif;
 }
 .inputs {
   margin: 0 auto;
@@ -205,7 +205,7 @@ input {
   max-width: 350px;
   margin: 0 auto;
   width: 100%;
-  padding: 30px;
+  padding: 50px;
 }
 .btn-clear {
   color: #ffffff;
@@ -231,14 +231,18 @@ input {
   float: right;
   outline: none;
 }
-
+.click-only {
+  margin-top: 90px;
+  font-size: 22px;
+  color: #e30f00;
+  font-weight: 550;
+}
 .btn-sort {
   color: #ffffff;
   box-sizing: border-box;
-  font-size: 17px;
-  height: 58px;
+  font-size: 20px;
+  height: 50px;
   width: 355px;
-  margin: 45px -100px;
   border: 1px solid#e30f00;
   background-color: #e30f00;
   text-align: center;
@@ -272,7 +276,7 @@ input.is-invalid {
   line-height: 20px;
 }
 .sk-fading-circle {
-  margin: 50px -15px !important;
+  margin: 5px 20px !important;
   float: right;
 }
 </style>>
