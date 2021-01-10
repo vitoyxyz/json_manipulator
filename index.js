@@ -52,6 +52,7 @@ app.post('/create_entry', (req, res) => {
 
     //tag*, response*, pattern*, context_filter, context_set
     reqData = req.body;
+    console.log(req.body)
     if (reqData.tag == undefined || reqData.tag == null || reqData.tag == '') {
 
         res.status(400).send('Tag is required')

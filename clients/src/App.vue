@@ -16,26 +16,26 @@
         <label for="pattern">
           <p>
             Pattern <span class="required"> *</span>
-            <button @click="addPattern()" class="add">Add</button>
+            <button @click="addPattern()" type="button"  class="add">Add</button>
           </p>
           <input
             ref="pattern"
-            :class="{ 'is-invalid': submitted && $v.form.pattern.$error }"
+            :class="{ 'is-invalid': submitted && $v.pattern.$error }"
             type="text"
             v-model="pattern"
           />
         </label>
 
-        <label for="responses">
+        <label for="response">
           <p>
             Responses <span class="required"> *</span>
-            <button @click="addResponse()" class="add">Add</button>
+            <button @click="addResponse()" type="button" class="add">Add</button>
           </p>
           <input
-            ref="responses"
-            :class="{ 'is-invalid': submitted && $v.form.responses.$error }"
+            ref="response"
+            :class="{ 'is-invalid': submitted && $v.response.$error }"
             type="text"
-            v-model="responses"
+            v-model="response"
           />
         </label>
 
@@ -73,25 +73,25 @@ export default {
     return {
       form: {
         tag: "",
-        pattern: [],
+        patterns: [],
         responses: [],
         context_set: "",
         context_filter: "",
       },
       submitted: false,
       pattern: [],
-      responses: [],
+      response: [],
     };
   },
   validations: {
+    pattern: {
+      required,
+    },
+    response: {
+      required,
+    },
     form: {
       tag: {
-        required,
-      },
-      pattern: {
-        required,
-      },
-      responses: {
         required,
       },
     },
@@ -99,7 +99,7 @@ export default {
   methods: {
     clearForm() {
       this.form.tag = "";
-      this.form.pattern = [];
+      this.form.patterns = [];
       this.form.responses = [];
       this.form.context_set = "";
       this.form.context_filter = "";
@@ -107,7 +107,11 @@ export default {
     submitForm() {
       this.submitted = true;
       this.$v.$touch();
-      if (this.$v.$invalid) {
+      if (
+        this.$v.$invalid &&
+        this.form.patterns.length == 0 &&
+        this.form.responses.length == 0
+      ) {
         return;
       }
       axios.post("//localhost:3030/create_entry", this.form).then(
@@ -121,15 +125,17 @@ export default {
       );
     },
     addPattern() {
+     
       if (this.pattern !== "") {
-        this.form.pattern.push(this.pattern);
+        this.form.patterns.push(this.pattern);
         this.pattern = "";
       }
     },
     addResponse() {
+     
       if (this.responses !== "") {
-        this.form.responses.push(this.responses);
-        this.responses = "";
+        this.form.responses.push(this.response);
+        this.response = "";
       }
     },
   },
