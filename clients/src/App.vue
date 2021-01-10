@@ -111,13 +111,24 @@ export default {
     submitForm() {
       this.submitted = true;
       this.$v.$touch();
-      if (
+        if (
         this.$v.$invalid &&
         this.form.patterns.length == 0 &&
-        this.form.responses.length == 0
-      ) {
+        this.form.responses.length == 0 
+      )
+      {
         return;
       }
+      else if (this.pattern == "" && this.form.patterns.length  > 0  && this.response == "" &&  this.form.responses.length > 0 ){
+        this.$v.$error == false;
+          this.form.patterns.push(this.pattern);
+              this.form.responses.push(this.response);
+      }
+      else{
+         this.form.patterns.push(this.pattern);
+              this.form.responses.push(this.response);
+      }
+     
       axios.post("//localhost:3030/create_entry", this.form).then(
         (response) => {
           this.submitted = true;
@@ -127,20 +138,19 @@ export default {
           console.log(error);
         }
       );
+    
     },
     sortAndSave(){
         this.submitted = true;
         console.log(this.submitted);
     },
     addPattern() {
-     
       if (this.pattern !== "") {
         this.form.patterns.push(this.pattern);
         this.pattern = "";
       }
     },
     addResponse() {
-     
       if (this.responses !== "") {
         this.form.responses.push(this.response);
         this.response = "";
