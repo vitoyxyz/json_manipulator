@@ -166,22 +166,7 @@ app.post('/create_entry', (req, res) => {
 //         console.log(data)
 //         if (!data == '' || !'intents' in data) {
 //             // Get all elements with proporty context_filter
-//             filtered_data = data.intents.forEach(el => {
-
-//                 if ('context_filter' in el) {
-//                     data.intents.forEach(el2 => {
-//                         if (el.context_filter === el2.context_set) {
-//                             return el.pattern = el2.response.forEach(el3 => {
-//                                 el.pattern.forEach(el4 => {
-//                                     return el3 + ' ' + el4;
-//                                 })
-
-//                             })
-//                         }
-//                     })
-//                 }
-
-//             })
+        
 
 
 
