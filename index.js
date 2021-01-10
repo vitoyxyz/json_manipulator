@@ -86,18 +86,12 @@ app.post('/create_entry', (req, res) => {
 
     jsonManipulator.fileExists().then().catch(err => {
 
-        jsonManipulator.createFile(`{"intents": []}`).then().catch(err => console.log(err))
+        jsonManipulator.createFile(`{"intents": []}`).then().catch()
         jsonFile = jsonManipulator.readFile()
 
         jsonFile.then(data => {
-            if (data == '') {
-                obj = {
-                    intents: []
-                }
-                return obj
-            } else {
-                return JSON.parse(data)
-            }
+
+            return JSON.parse(data)
 
         }).then(parsedJson => {
 
@@ -121,32 +115,89 @@ app.post('/create_entry', (req, res) => {
             }
 
         })
+        return
+    })
+
+    jsonFile = jsonManipulator.readFile()
+    jsonFile.then(data => {
+        if (data == '') {
+            obj = {
+                intents: []
+            }
+            return obj
+        } else {
+            return JSON.parse(data)
+        }
+
+    }).then(parsedJson => {
+
+        parsedJson.intents.push(reqData)
+        return parsedJson
+
+    }).then(writeJson => {
+
+        jsonManipulator.writeFile(JSON.stringify(writeJson))
+
+        res.status(200).json({
+            message: 'Saved!'
+        })
+
+    }).catch(err => {
+        if (!res.headersSent) {
+            console.log(err)
+            res.status(500).json({
+                err: 'Some thing went wrong!. Try again.'
+            })
+        }
+
     })
     // return
 })
 
 // Go through all the elements and do the logic with context_set and context_filter
 
-app.post('/implement_logic', (req, res) => {
+// app.post('/implement_logic', (req, res) => {
 
-    fileData = jsonManipulator.readFile();
+//     fileData = jsonManipulator.readFile();
 
-    fileData.then(data => {
-        return JSON.parse(data)
-    }).then(data => {
+//     fileData.then(data => {
+//         return JSON.parse(data)
+//     }).then(data => {
+//         console.log(data)
+//         if (!data == '' || !'intents' in data) {
+//             // Get all elements with proporty context_filter
+//             filtered_data = data.intents.forEach(el => {
 
-        // data.
+//                 if ('context_filter' in el) {
+//                     data.intents.forEach(el2 => {
+//                         if (el.context_filter === el2.context_set) {
+//                             return el.pattern = el2.response.forEach(el3 => {
+//                                 el.pattern.forEach(el4 => {
+//                                     return el3 + ' ' + el4;
+//                                 })
+
+//                             })
+//                         }
+//                     })
+//                 }
+
+//             })
 
 
 
 
-    })
+
+
+//             console.log(context_filter_data)
+//         }
+
+//     })
 
 
 
 
 
-})
+// })
 
 app.listen(port, () => {
     console.log(`Example app listening at http://localhost:${port}`)
