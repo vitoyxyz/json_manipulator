@@ -60,9 +60,12 @@
       </button>
     
     </div>
-        <button class="btn-sort" @click="sortAndSave()">
-        Sort &  Save  <circle-spin v-bind:loading="isLoading"></circle-spin>
+    <div @click="sortAndSave()">
+        <button class="btn-sort" >
+        Sort &  Save 
       </button>
+       <circle-spin v-if="isLoading"></circle-spin>
+       </div>
   </div>
 </template>
 
@@ -85,7 +88,7 @@ export default {
       submitted: false,
       pattern: [],
       response: [],
-      isLoading: true
+      isLoading: false
     };
   },
   validations: {
@@ -138,8 +141,9 @@ export default {
     
     },
     sortAndSave(){
+        this.isLoading = true;
         this.submitted = true;
-        console.log(this.submitted);
+      console.log(this.submitted);
     },
     addPattern() {
       if (this.pattern !== "") {
@@ -224,8 +228,8 @@ input {
   height: 58px;
   width: 355px;
   margin: 45px -100px;
-  border: 1px solid #8f0000;
-  background-color: #8f0000;
+  border: 1px solid#e30f00;
+  background-color: #e30f00;
  text-align: center;
  position: absolute;
 }
@@ -255,7 +259,9 @@ input.is-invalid {
   line-height: 20px;
 }
 .sk-fading-circle {
-  margin: 0px;
+  margin: 50px -15px !important;
+  float: right;
+   
 }
 </style>>
 
