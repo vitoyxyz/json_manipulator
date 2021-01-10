@@ -8,11 +8,8 @@ const port = 3030
 
 const jsonManipulator = require('./jsonManipulator');
 const {
-    json,
-    response
+    json
 } = require('express')
-
-
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({
@@ -28,15 +25,9 @@ app.use(cors({
     'preflightContinue': true
 }));
 
+
+
 app.get('/', (req, res) => {
-
-    res.json({
-        json: 0
-    })
-
-})
-
-app.get('/get_json_file', (req, res) => {
 
     jsonFile = jsonManipulator.readFile()
 
@@ -45,6 +36,10 @@ app.get('/get_json_file', (req, res) => {
             json: JSON.stringify(data)
         })
 
+    }).catch(err => {
+        res.json({
+            message: err
+        })
     })
 })
 
@@ -52,106 +47,103 @@ app.post('/create_entry', (req, res) => {
 
     //tag*, response*, pattern*, context_filter, context_set
     reqData = req.body;
-    console.log(req.body)
-    if (reqData.tag == undefined || reqData.tag == null || reqData.tag == '') {
-
-        res.status(400).send('Tag is required')
+    if (!'tag' in reqData && reqData.tag == undefined || reqData.tag == null || reqData.tag == '') {
 
 
-
-    }
-    if (reqData.response == undefined || reqData.response == null || reqData.response == '') {
-
-        res.status(400).send('Response is required')
-
-
-
-    }
-    if (reqData.pattern == undefined || reqData.pattern == null || reqData.pattern == '') {
-
-        res.status(400).send('Response is required')
-
-
-
-    }
-    jsonFile = jsonManipulator.readFile()
-
-
-
-    jsonFile.then(data => {
-        return JSON.parse(data)
-    }).then(parsedJson => {
-        if (reqData.context_filter != undefined && reqData.context_filter != null && reqData.context_filter != '') {
-            // find the elements with same context_set as the context_filter of the request,
-            // get their response and pattern and you append them, together and add them to the
-            // pattern of the new entry.
-            arr_context_set = parsedJson.intents.filter(obj => {
-
-                return obj.context_set == reqData.context_filter
-
-
-            })
-
-            // console.log(arr_context_set)
-
-            new_pattern = [];
-            arr_context_set[0].patterns.forEach(pattern => {
-                arr_context_set[0].responses.forEach(response => {
-                    str = response + pattern;
-                    // console.log(str)
-                    new_pattern.push(str)
-                })
-            });
-            // console.log(new_pattern);
-
-            new_obj = {
-                tag: reqData.tag,
-                patterns: new_pattern,
-                responses: reqData.response,
-                context_set: reqData.context_set,
-                context_filter: reqData.context_filter
-
-            }
-            parsedJson.intents.push(new_obj)
-            return parsedJson
-        } else {
-
-            new_obj = {
-                tag: reqData.tag,
-                patterns: reqData.pattern,
-                responses: reqData.response,
-                context_set: reqData.context_set,
-            }
-
-            parsedJson.intents.push(new_obj)
-            return parsedJson
-        }
-    }).then(writeJson => {
-
-        jsonManipulator.writeFile(JSON.stringify(writeJson))
-
-
-
-        res.status(200).json({
-            message: 'Saved!'
-        })
-
-
-    }).catch(err => {
         if (!res.headersSent) {
-            res.status(500).json({
-                err: 'Some thing went wrong!. Try again.'
-            })
+
+            res.status(400).send('Tag is required')
+            return
         }
+    }
+    if (!'response' in reqData && reqData.response.length == 0) {
+        if (!res.headersSent) {
 
+            res.status(400).send('Response is required')
+            return
+
+        }
+    }
+    if ('pattern' in reqData && reqData.pattern.length == 0) {
+
+        if (!res.headersSent) {
+
+            res.status(400).send('Pattern is required')
+            return
+
+        }
+    }
+    if (reqData.context_set == undefined || reqData.context_set == null || reqData.context_set == '') {
+
+        delete reqData.context_set
+
+    }
+    if (reqData.context_filter == undefined || reqData.context_filter == null || reqData.context_filter == '') {
+
+        delete reqData.context_filter
+
+    }
+
+    jsonManipulator.fileExists().then().catch(err => {
+
+        jsonManipulator.createFile(`{"intents": []}`).then().catch(err => console.log(err))
+        jsonFile = jsonManipulator.readFile()
+
+        jsonFile.then(data => {
+            if (data == '') {
+                obj = {
+                    intents: []
+                }
+                return obj
+            } else {
+                return JSON.parse(data)
+            }
+
+        }).then(parsedJson => {
+
+            parsedJson.intents.push(reqData)
+            return parsedJson
+
+        }).then(writeJson => {
+
+            jsonManipulator.writeFile(JSON.stringify(writeJson))
+
+            res.status(200).json({
+                message: 'Saved!'
+            })
+
+        }).catch(err => {
+            if (!res.headersSent) {
+                console.log(err)
+                res.status(500).json({
+                    err: 'Some thing went wrong!. Try again.'
+                })
+            }
+
+        })
     })
-
-
+    // return
 })
 
 // Go through all the elements and do the logic with context_set and context_filter
 
 app.post('/implement_logic', (req, res) => {
+
+    fileData = jsonManipulator.readFile();
+
+    fileData.then(data => {
+        return JSON.parse(data)
+    }).then(data => {
+
+        // data.
+
+
+
+
+    })
+
+
+
 
 
 })
