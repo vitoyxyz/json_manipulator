@@ -191,12 +191,9 @@ app.post('/implement_logic', (req, res) => {
         for (let index = 0; index < data.intents.length; index++) {
             temp = []
             if ('context_filter' in data.intents[index]) {
-
-                parr = data.intents[index].patterns;
-                // console.log(res)
-
                 for (let index1 = 0; index1 < data.intents.length; index1++) {
                     if (data.intents[index].context_filter === data.intents[index1].context_set) {
+                        parr = data.intents[index].patterns;
                         res = data.intents[index1].responses;
                         for (let i = 0; i < parr.length; i++) {
                             for (let j = 0; j < res.length; j++) {
@@ -205,9 +202,9 @@ app.post('/implement_logic', (req, res) => {
 
                             }
                         }
-                        data.intents[index].patterns = temp;
                     }
                 }
+                data.intents[index].patterns = temp;
             }
         }
 
