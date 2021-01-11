@@ -1,0 +1,30 @@
+{
+    "intents": [{
+        "tag": "hello",
+        "patterns": ["Wa", "hi", "good day"],
+        "responses": ["Is your day okey?", "How is your doggy?"],
+        "context_set": "intro"
+    }, {
+        "tag": "hello",
+        "patterns": ["hello", "hi", "good day"],
+        "responses": ["hi, how are you?", "Hello, are you doing fine?"],
+        "context_set": "intro"
+    }, {
+        "tag": "good",
+        "patterns": [
+            "Is your day okey? Good thanks.", "How is your doggy? Good thanks.",
+            "Is your day okey? Yes TNX", "How is your doggy? Yes TNX",
+            "Is your day okey? Fine gtfo", "How is your doggy? Fine gtfo",
+            "hi, how are you? Good thanks.", "Hello, are you doing fine? Good thanks.",
+            "hi, how are you? Yes TNX", "Hello, are you doing fine? Yes TNX",
+            "hi, how are you? Fine gtfo", "Hello, are you doing fine? Fine gtfo"
+        ],
+        "responses": ["What do you need?", "Hello, are you doing fine?", "Nice, I'm fine also."],
+        "context_filter": "intro"
+    }, {
+        "tag": "bad",
+        "patterns": ["Is your day okey? Shit", "How is your doggy? Shit", "Is your day okey? Fuck", "How is your doggy? Fuck", "Is your day okey? Hello noo", "How is your doggy? Hello noo", "Is your day okey? Hell yea", "How is your doggy? Hell yea", "hi, how are you? Shit", "Hello, are you doing fine? Shit", "hi, how are you? Fuck", "Hello, are you doing fine? Fuck", "hi, how are you? Hello noo", "Hello, are you doing fine? Hello noo", "hi, how are you? Hell yea", "Hello, are you doing fine? Hell yea"],
+        "responses": ["hi, how are you?", "Hello, are you doing fine?", "Nice, I'm fine also.", "It will be okay."],
+        "context_filter": "intro"
+    }]
+}
