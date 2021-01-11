@@ -208,43 +208,43 @@ input {
   padding: 50px;
 }
 .btn-clear {
-  color: #ffffff;
+  color: #000000;
   box-sizing: border-box;
   font-size: 17px;
   height: 58px;
   width: 100px;
-  border: 1px solid #b80000;
-  background-color: #b80000;
+  border: 1px solid #000000;
+  background-color: #ffffff;
   float: left;
   margin-left: -9px;
   outline: none;
 }
 
 .btn-submit {
-  color: #ffffff;
+  color: #000000;
   box-sizing: border-box;
   font-size: 17px;
   height: 58px;
   width: 100px;
-  border: 1px solid#094a00;
-  background-color: #094a00;
+  border: 1px solid#000000;
+  background-color: #ffffff;
   float: right;
   outline: none;
 }
 .click-only {
   margin-top: 90px;
   font-size: 22px;
-  color: #e30f00;
+  color: #000000;
   font-weight: 550;
 }
 .btn-sort {
-  color: #ffffff;
+  color: #000000;
   box-sizing: border-box;
   font-size: 20px;
   height: 50px;
   width: 355px;
-  border: 1px solid#e30f00;
-  background-color: #e30f00;
+  border: 1px solid#000000;
+  background-color: #ffffff;
   text-align: center;
   position: absolute;
   outline: none;
@@ -259,13 +259,13 @@ input.is-invalid {
 }
 
 .add {
-  color: #ffffff;
+  color: #000000;
   box-sizing: border-box;
   font-size: 15px;
   height: 30px;
   width: 70px;
-  border: 1px solid #b80000;
-  background-color: #b80000;
+  border: 1px solid #000000;
+  background-color: #ffffff;
   float: right;
   margin-right: 12px;
   outline: none;
