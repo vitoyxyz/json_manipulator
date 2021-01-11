@@ -61,7 +61,7 @@
         Submit
       </button>
       <div class="click-only" @click="sortAndSave()">
-        <p style="margin:5px">Click only if you added all elements</p>
+        <p style="margin: 5px">Click only if you added all elements</p>
         <button class="btn-sort">Sort & Save</button>
         <circle-spin v-if="isLoading"></circle-spin>
       </div>
@@ -150,18 +150,18 @@ export default {
           console.log(err);
         });
     },
-  },
-  addPattern() {
-    if (this.pattern !== "") {
-      this.form.patterns.push(this.pattern);
-      this.pattern = "";
-    }
-  },
-  addResponse() {
-    if (this.responses !== "") {
-      this.form.responses.push(this.response);
-      this.response = "";
-    }
+    addPattern() {
+      if (this.pattern !== "") {
+        this.form.patterns.push(this.pattern);
+        this.pattern = "";
+      }
+    },
+    addResponse() {
+      if (this.responses !== "") {
+        this.form.responses.push(this.response);
+        this.response = "";
+      }
+    },
   },
 };
 </script>

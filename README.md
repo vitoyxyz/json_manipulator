@@ -24,7 +24,7 @@ apt install npm
 
 ### clients/ directory is the front-end, there is a Readme file
 
-### / the root of this project is the back-end
+### / the root of this project is the back-end `localhost:3030`
 
 ## Setup back-end part
 
@@ -37,4 +37,10 @@ npm install
 ```
 npm run start
 ```
+
+<hr>
+
+
+
+## JSON file is saved in directory json/ under the name `intents.json`
 
