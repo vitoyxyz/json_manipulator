@@ -107,8 +107,8 @@ export default {
   methods: {
     clearForm() {
       this.form.tag = "";
-      this.pattern = [];
-      this.response = [];
+      this.pattern = "";
+      this.response = "";
       this.form.responses = [];
       this.form.patterns = [];
       this.form.context_set = "";
@@ -124,21 +124,19 @@ export default {
       ) {
         return;
       }
-     if (this.pattern != "" ){
+      if (this.pattern != "") {
         this.form.patterns.push(this.pattern);
-       
       }
-       if (this.response != ""){
-         this.form.responses.push(this.response);
+      if (this.response != "") {
+        this.form.responses.push(this.response);
       }
-      
+
       axios
         .post("//localhost:3030/create_entry", this.form)
         .then((response) => {
           this.submitted = true;
           alert(response.data.message);
           this.clearForm();
-          
         })
         .catch((err) => {
           console.log(err);
