@@ -213,8 +213,8 @@ input {
   font-size: 17px;
   height: 58px;
   width: 100px;
-  border: 1px solid #b80000;
-  background-color: #b80000;
+  border: 1px solid #000000;
+  background-color:#000000;
   float: left;
   margin-left: -9px;
   outline: none;
@@ -226,15 +226,15 @@ input {
   font-size: 17px;
   height: 58px;
   width: 100px;
-  border: 1px solid#094a00;
-  background-color: #094a00;
+  border: 1px solid#000000;
+  background-color: #000000;
   float: right;
   outline: none;
 }
 .click-only {
   margin-top: 90px;
   font-size: 22px;
-  color: #e30f00;
+  color: #000000;
   font-weight: 550;
 }
 .btn-sort {
@@ -243,8 +243,8 @@ input {
   font-size: 20px;
   height: 50px;
   width: 355px;
-  border: 1px solid#e30f00;
-  background-color: #e30f00;
+  border: 1px solid#000000;
+  background-color: #000000;
   text-align: center;
   position: absolute;
   outline: none;
@@ -264,8 +264,8 @@ input.is-invalid {
   font-size: 15px;
   height: 30px;
   width: 70px;
-  border: 1px solid #b80000;
-  background-color: #b80000;
+  border: 1px solid #000000;
+  background-color:  #000000;
   float: right;
   margin-right: 12px;
   outline: none;
