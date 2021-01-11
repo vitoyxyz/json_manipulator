@@ -109,6 +109,8 @@ export default {
       this.form.tag = "";
       this.pattern = [];
       this.response = [];
+      this.form.responses = [];
+      this.form.patterns = [];
       this.form.context_set = "";
       this.form.context_filter = "";
     },
@@ -121,18 +123,22 @@ export default {
         this.form.responses.length == 0
       ) {
         return;
-      } else {
-        if (this.pattern !== "" && this.response !== "")
-          this.form.patterns.push(this.pattern);
-        this.form.responses.push(this.response);
       }
-
+     if (this.pattern != "" ){
+        this.form.patterns.push(this.pattern);
+       
+      }
+       if (this.response != ""){
+         this.form.responses.push(this.response);
+      }
+      
       axios
         .post("//localhost:3030/create_entry", this.form)
         .then((response) => {
           this.submitted = true;
           alert(response.data.message);
           this.clearForm();
+          
         })
         .catch((err) => {
           console.log(err);
@@ -213,6 +219,7 @@ input {
   font-size: 17px;
   height: 58px;
   width: 100px;
+  font-weight: bold;
   border: 1px solid #000000;
   background-color: #ffffff;
   float: left;
@@ -228,6 +235,7 @@ input {
   width: 100px;
   border: 1px solid#000000;
   background-color: #ffffff;
+  font-weight: bold;
   float: right;
   outline: none;
 }
@@ -248,6 +256,7 @@ input {
   text-align: center;
   position: absolute;
   outline: none;
+  font-weight: bold;
 }
 
 input.is-invalid {
@@ -269,6 +278,7 @@ input.is-invalid {
   float: right;
   margin-right: 12px;
   outline: none;
+  font-weight: bold;
 }
 .required {
   color: #f50537;
