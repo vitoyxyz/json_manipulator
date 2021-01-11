@@ -205,11 +205,9 @@ app.post('/implement_logic', (req, res) => {
 
                             }
                         }
-                        console.log(data.intents[index], data.intents[index1])
                         data.intents[index].patterns = temp;
                     }
                 }
-
             }
         }
 
