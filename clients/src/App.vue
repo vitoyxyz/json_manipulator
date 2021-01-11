@@ -141,7 +141,7 @@ export default {
     sortAndSave() {
       this.isLoading = true;
       axios
-        .post("//localhost:3030/create_entry")
+        .post("//localhost:3030/implement_logic")
         .then((response) => {
           alert(response.data.message);
           this.isLoading = false;
