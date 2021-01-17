@@ -86,8 +86,8 @@ export default {
         context_filter: "",
       },
       submitted: false,
-      pattern: [],
-      response: [],
+      pattern: "",
+      response: "",
       isLoading: false,
     };
   },
@@ -161,7 +161,7 @@ export default {
       }
     },
     addResponse() {
-      if (this.responses !== "") {
+      if (this.response !== "") {
         this.form.responses.push(this.response);
         this.response = "";
       }

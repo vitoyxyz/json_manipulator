@@ -7,9 +7,12 @@ const cors = require('cors');
 const port = 3030
 
 const jsonManipulator = require('./jsonManipulator');
-const {
-    json
-} = require('express')
+
+
+
+const json_file = './json/intents.json'
+const sorted_json_file = './json/sorted_intents.json'
+
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({
@@ -29,7 +32,7 @@ app.use(cors({
 
 app.get('/', (req, res) => {
 
-    jsonFile = jsonManipulator.readFile()
+    jsonFile = jsonManipulator.readFile(json_file)
 
     jsonFile.then(data => {
         res.json({
@@ -84,8 +87,8 @@ app.post('/create_entry', (req, res) => {
 
     }
 
-    jsonManipulator.fileExists().then(el => {
-        jsonFile = jsonManipulator.readFile()
+    jsonManipulator.fileExists(json_file).then(el => {
+        jsonFile = jsonManipulator.readFile(json_file)
         jsonFile.then(data => {
             if (data == '') {
                 obj = {
@@ -103,7 +106,7 @@ app.post('/create_entry', (req, res) => {
 
         }).then(writeJson => {
 
-            jsonManipulator.writeFile(JSON.stringify(writeJson))
+            jsonManipulator.writeFile(json_file, JSON.stringify(writeJson))
 
             res.status(200).json({
                 message: 'Saved!'
@@ -120,8 +123,8 @@ app.post('/create_entry', (req, res) => {
         })
     }).catch(err => {
 
-        jsonManipulator.createFile(`{"intents": []}`).then().catch()
-        jsonFile = jsonManipulator.readFile()
+        jsonManipulator.createFile(json_file, `{"intents": []}`).then().catch()
+        jsonFile = jsonManipulator.readFile(json_file)
 
         jsonFile.then(data => {
 
@@ -134,7 +137,7 @@ app.post('/create_entry', (req, res) => {
 
         }).then(writeJson => {
 
-            jsonManipulator.writeFile(JSON.stringify(writeJson))
+            jsonManipulator.writeFile(json_file, JSON.stringify(writeJson))
 
             res.status(200).json({
                 message: 'Saved!'
@@ -160,7 +163,7 @@ app.post('/create_entry', (req, res) => {
 
 app.post('/implement_logic', (req, res) => {
 
-    fileData = jsonManipulator.readFile();
+    fileData = jsonManipulator.readFile(json_file);
 
 
     fileData.then(data => {
@@ -211,8 +214,16 @@ app.post('/implement_logic', (req, res) => {
         return data;
 
     }).then(writeJson => {
+        jsonManipulator.fileExists(sorted_json_file).then(el => {
 
-        jsonManipulator.writeFile(JSON.stringify(writeJson))
+            jsonManipulator.writeFile(sorted_json_file, JSON.stringify(writeJson))
+
+        }).catch(er => {
+
+            jsonManipulator.createFile(sorted_json_file, JSON.stringify(writeJson)).then().catch()
+
+        })
+
 
         res.status(200).json({
             message: 'Sorted!'
